@@ -1,5 +1,5 @@
 # Breakout Plan
-### NAME
+### NAME Luka Mdivani
 
 
 
@@ -61,8 +61,8 @@ higher up on the screen.
 
 ## Class Ideas
 Some Necessary classes are listed below:
- * A class for the ball, the class will be used to track the ball, its features(like speed) and direction. One fo the 
- * methods of the class will
+ 1. A class for the ball, the class will be used to track the ball, its features(like speed) and direction. One fo the 
+ methods of the class will
 
  * Idea #2
 
