@@ -4,10 +4,13 @@
 
 
 ## Interesting Breakout Variants
+There were two breakout variants which especially caught my eye.
 
- * Idea #1
+ * One interesting variation of breakout which I have played before had an interesting concept, it let you start with one ball on an easy level, if you managed to clear the level, the difficulty would increase but you would also get twice the amount of balls each level. The goal was to complete ("clear") as many levels as possible. you would lose if you lost all balls without manageing to clear all levels.
 
- * Idea #2
+ * Also, the pinball breakout variant, which combines two classic arcade games, pinball and breakout. It is an interesting 
+combination. The version which I saw let you choose the starting position and power of you ball at the top of the screen,
+the ball would fall and bounce among many blocks, which needed different amount of hits to be broken. According to the number of points your ball managed to collect, you were given a chance to throw another pinball, as well as buy interesting upgrades. Such as burst balls which spawned more than one ball etc.
 
 
 ## Paddle Ideas
