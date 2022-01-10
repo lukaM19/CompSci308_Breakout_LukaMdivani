@@ -2,28 +2,6 @@
 ### NAME
 
 
-#### Examples
-
-You need to put blank lines to write some text
-
-in separate paragraphs.
-
-
-Emphasis, aka italics, with *asterisks* or _underscores_.
-
-Strong emphasis, aka bold, with **asterisks** or __underscores__.
-
-Combined emphasis with **asterisks and _underscores_**.
-
-
-You can also make lists:
-* Bullets are made with asterisks
-1. You can order things with numbers.
-
-
-You can put links in like this: [Duke CompSci](https://www.cs.duke.edu)
-
-
 
 ## Interesting Breakout Variants
 
@@ -36,7 +14,7 @@ You can put links in like this: [Duke CompSci](https://www.cs.duke.edu)
 
  * Paddle will reflect the ball differently depending on where the ball touches tha paddle.
 
- * Paddle will 
+ * Paddle will teleport to the other side if it leaves the screen.
 
 
 ## Block Ideas
@@ -75,7 +53,7 @@ You can put links in like this: [Duke CompSci](https://www.cs.duke.edu)
  * Level 2- Same level design, but with 3 diagonally placed permanent blocks, but 2 power up blocks are also available.
 
  * Level 3- Same level design, but some blocks take longer to destroy, the ball will move faster and the paddle will be 
- * higher up on the screen.
+higher up on the screen.
 
 
 ## Class Ideas
