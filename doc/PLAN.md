@@ -34,52 +34,54 @@ You can put links in like this: [Duke CompSci](https://www.cs.duke.edu)
 
 ## Paddle Ideas
 
- * Idea #1
+ * Paddle will reflect the ball differently depending on where the ball touches tha paddle.
 
- * Idea #2
+ * Paddle will 
 
 
 ## Block Ideas
 
- * Idea #1
+ * Block which drops a power up when hit
 
- * Idea #2
+ * Block which is permanent and can't be destroyed
 
- * Idea #3
+ * Block which takes 2 hits to be destroyed
 
 
 ## Power-up Ideas
 
- * Idea #1
+ * Doubles available lives
 
- * Idea #2
+ * makes paddle larger by 2%
 
- * Idea #3
+ * Speeds up the ball by 5%
 
 
 ## Cheat Key Ideas
 
- * Idea #1
+ * Drops a power up instantly
 
- * Idea #2
+ * adds 3 lives
 
- * Idea #3
+ * make paddle larger
 
- * Idea #4
+ * makes the ball slower
 
 
 ## Level Descriptions
 
- * Idea #1
+ * Level 1- Basic level, with only default block in 4 rows and 4 columns.
 
- * Idea #2
+ * Level 2- Same level design, but with 3 diagonally placed permanent blocks, but 2 power up blocks are also available.
 
- * Idea #3
+ * Level 3- Same level design, but some blocks take longer to destroy, the ball will move faster and the paddle will be 
+ * higher up on the screen.
 
 
 ## Class Ideas
-
- * Idea #1
+Some Necessary classes are listed below:
+ * A class for the ball, the class will be used to track the ball, its features(like speed) and direction. One fo the 
+ * methods of the class will
 
  * Idea #2
 
