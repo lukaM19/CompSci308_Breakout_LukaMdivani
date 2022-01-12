@@ -6,7 +6,10 @@
 ## Interesting Breakout Variants
 There were two breakout variants which especially caught my eye.
 
- * One interesting variation of breakout which I have played before had an interesting concept, it let you start with one ball on an easy level, if you managed to clear the level, the difficulty would increase but you would also get twice the amount of balls each level. The goal was to complete ("clear") as many levels as possible. you would lose if you lost all balls without manageing to clear all levels.
+ * One interesting variation of breakout which I have played before had an interesting concept, it 
+let you start with one ball on an easy level, if you managed to clear the level, the difficulty would
+increase but you would also get twice the amount of balls each level. The goal was to complete ("clear")
+as many levels as possible. you would lose if you lost all balls without managing to clear a level.
 
  * Also, the pinball breakout variant, which combines two classic arcade games, pinball and breakout. It is an interesting 
 combination. The version which I saw let you choose the starting position and power of you ball at the top of the screen,
@@ -22,7 +25,7 @@ the ball would fall and bounce among many blocks, which needed different amount 
 
 ## Block Ideas
 
- * Block which drops a power up when hit
+ * Block which drops a random power up when hit
 
  * Block which is permanent and can't be destroyed
 
@@ -64,9 +67,12 @@ Some Necessary classes are listed below:
  1. A class for the ball, the class will be used to track the ball, its features(like speed) and direction. One fo the 
  methods of the class will
 
- * Idea #2
+ * A class for the paddle. One of the methods in the class will be a method for registering key input
+from the player and making the paddle move accordingly.
 
- * Idea #3
+ * A class for block. This class will be for the "blocks" which need to be destroyed. An example of a method is 
+a method for registering when it is destroyed and respond to the event, like spawn a power up.
 
- * Idea #4
+ * I think would need a class for setting up the scene depending on the level. A method in the class would be
+a method for detecting whether the current level has been cleared and loading the next one.
 
