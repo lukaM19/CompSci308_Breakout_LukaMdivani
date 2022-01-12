@@ -61,18 +61,27 @@ the ball would fall and bounce among many blocks, which needed different amount 
  * Level 3- Structure will have islands of destroyable blocks in each corner and 2 indestructible balls in the middle, new blocks which take longer to destroy, the ball will move faster and the paddle will be 
 higher up on the screen.
 
+txt files for level design are in src\main\resources. 
+
+Key for .txt files:
+* 1 - normal block
+* 2 - power-up blocks
+* 3 - harder block(take 2 shots to break)
+* 0 - permanent blocks
+* X - Empty Space
+
 
 ## Class Ideas
 Some Necessary classes are listed below:
  1. A class for the ball, the class will be used to track the ball, its features(like speed) and direction. One fo the 
  methods of the class will detect collisions and change direction of the ball accordingly.
 
- * A class for the paddle. One of the methods in the class will be a method for registering key input
+ 2. A class for the paddle. One of the methods in the class will be a method for registering key input
 from the player and making the paddle move accordingly.
 
- * A class for block. This class will be for the "blocks" which need to be destroyed. An example of a method is 
+ 3. A class for block. This class will be for the "blocks" which need to be destroyed. An example of a method is 
 a method for registering when it is destroyed and respond to the event, like spawn a power up.
 
- * I think would need a class for setting up the scene depending on the level. A method in the class would be
+ 4. I think would need a class for setting up the scene depending on the level. A method in the class would be
 a method for detecting whether the current level has been cleared and loading the next one.
 
