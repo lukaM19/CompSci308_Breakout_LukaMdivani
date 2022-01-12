@@ -58,14 +58,14 @@ the ball would fall and bounce among many blocks, which needed different amount 
 
  * Level 2- Same level design, but with 3 diagonally placed permanent blocks, but 2 power up blocks are also available.
 
- * Level 3- Same level design, but some blocks take longer to destroy, the ball will move faster and the paddle will be 
+ * Level 3- Structure will have islands of destroyable blocks in each corner and 2 indestructible balls in the middle, new blocks which take longer to destroy, the ball will move faster and the paddle will be 
 higher up on the screen.
 
 
 ## Class Ideas
 Some Necessary classes are listed below:
  1. A class for the ball, the class will be used to track the ball, its features(like speed) and direction. One fo the 
- methods of the class will
+ methods of the class will detect collisions and change direction of the ball accordingly.
 
  * A class for the paddle. One of the methods in the class will be a method for registering key input
 from the player and making the paddle move accordingly.
