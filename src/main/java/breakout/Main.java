@@ -1,17 +1,15 @@
 package breakout;
 
-import java.util.Formatter.BigDecimalLayoutForm;
+import java.util.ArrayList;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.scene.shape.Circle;
-import breakout.Paddle;
-import breakout.Ball;
 import javafx.util.Duration;
 
 /**
@@ -44,7 +42,8 @@ public class Main extends Application {
 
     Paddle myPaddle = new Paddle(PADDLE_START_POSITION, WALL_SIZE_VERTICAL,SIZE_HORIZONTAL,SIZE_VERTICAL);
 
-
+    ArrayList<Rectangle> wallList
+        = new ArrayList<Rectangle>();
     Group walls = new Group();
 
     Rectangle topWall = new Rectangle(0,0,WALL_SIZE_HORIZONTAL,WALL_WIDTH);
@@ -57,7 +56,9 @@ public class Main extends Application {
     sideWallRight.setFill(Color.GRAY);
     sideWallRight.setStroke(Color.BLACK);
     walls.getChildren().addAll(topWall,sideWallLeft,sideWallRight);
-
+    wallList.add(topWall);
+    wallList.add(sideWallLeft);
+    wallList.add(sideWallRight);
 
     Group root = new Group();
     root.getChildren().add(myBall.getBallNode());
@@ -69,28 +70,35 @@ public class Main extends Application {
     stage.setTitle(TITLE);
 
 
-    scene.setOnKeyPressed(e -> myPaddle.handleKeyInput(e.getCode()));
-
+    scene.setOnKeyPressed(e -> {
+      myPaddle.handleKeyInput(e.getCode());
+      myBall.resetBall(e.getCode());
+    });
     stage.show();
     //Timeline
     Timeline animation = new Timeline();
     animation.setCycleCount(Timeline.INDEFINITE);
-    animation.getKeyFrames().add(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY,myPaddle,scene,myBall)));
+    animation.getKeyFrames().add(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY,myPaddle,myBall, wallList)));
     animation.play();
 
 
 
   }
 
+  public void readLevelInfoInto2DArray(){
+
+  }
 
 
-  public void step(double elapsedTime, Paddle myPaddle, Scene scene,Ball myBall){
+  public void step(double elapsedTime, Paddle myPaddle, Ball myBall, ArrayList<Rectangle> walls){
 
 
     myBall.move(elapsedTime);
-
-    myBall.deflectBall(myPaddle);
+    myBall.horizontalDeflectBall(walls);
+    myBall.paddleDeflectBall(myPaddle);
   }
+
+
 
 
 }
