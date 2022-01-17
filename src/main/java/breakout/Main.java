@@ -37,7 +37,7 @@ public class Main extends Application {
    * Initialize what will be displayed.
    */
   @Override
-  public void start(Stage stage) {
+  public void start(Stage stage) throws Exception {
     Ball myBall = new Ball(SIZE_HORIZONTAL/2, WALL_SIZE_VERTICAL, BALL_RADIUS,SIZE_HORIZONTAL,SIZE_VERTICAL);
 
     Paddle myPaddle = new Paddle(PADDLE_START_POSITION, WALL_SIZE_VERTICAL,SIZE_HORIZONTAL,SIZE_VERTICAL);
@@ -60,10 +60,16 @@ public class Main extends Application {
     wallList.add(sideWallLeft);
     wallList.add(sideWallRight);
 
+    LevelSetup ls =new LevelSetup();
+    ls.readFileTo2DArray(1);
+    ls.createBlocks();
+
+
     Group root = new Group();
     root.getChildren().add(myBall.getBallNode());
     root.getChildren().add(myPaddle.getPaddleNode());
     root.getChildren().add(walls);
+    root.getChildren().add(ls.blockGroup);
     Scene scene = new Scene(root, SIZE_HORIZONTAL, SIZE_VERTICAL, Color.DARKBLUE);
     stage.setScene(scene);
 
