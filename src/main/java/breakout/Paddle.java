@@ -86,7 +86,6 @@ public class Paddle {
 
     }
     handleBorderChange();
-    System.out.println(paddle.getX());
     if (paddleVerticalMove) {
       switch (code) {
         case UP -> paddle.setY(paddle.getY() - PADDLE_SPEED);

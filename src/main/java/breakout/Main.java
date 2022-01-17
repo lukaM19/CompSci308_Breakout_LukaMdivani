@@ -32,7 +32,9 @@ public class Main extends Application {
   public static final int WALL_SIZE_VERTICAL = 350;
   public static final int WALL_WIDTH = 20;
   public static final int BALL_RADIUS=10;
-
+  private Group root;
+  private Stage myStage;
+  private Scene myScene;
   /**
    * Initialize what will be displayed.
    */
@@ -42,6 +44,7 @@ public class Main extends Application {
 
     Paddle myPaddle = new Paddle(PADDLE_START_POSITION, WALL_SIZE_VERTICAL,SIZE_HORIZONTAL,SIZE_VERTICAL);
 
+    myStage=stage;
     ArrayList<Rectangle> wallList
         = new ArrayList<Rectangle>();
     Group walls = new Group();
@@ -62,46 +65,62 @@ public class Main extends Application {
 
     LevelSetup ls =new LevelSetup();
     ls.readFileTo2DArray(1);
+    ls.getBlockHealthInfo();
     ls.createBlocks();
 
 
-    Group root = new Group();
+    root = new Group();
     root.getChildren().add(myBall.getBallNode());
     root.getChildren().add(myPaddle.getPaddleNode());
     root.getChildren().add(walls);
-    root.getChildren().add(ls.blockGroup);
-    Scene scene = new Scene(root, SIZE_HORIZONTAL, SIZE_VERTICAL, Color.DARKBLUE);
-    stage.setScene(scene);
+    addLevelLayoutToRoot(ls);
+    myScene = new Scene(root, SIZE_HORIZONTAL, SIZE_VERTICAL, Color.DARKBLUE);
+    myStage.setScene(myScene);
 
-    stage.setTitle(TITLE);
+    myStage.setTitle(TITLE);
 
 
-    scene.setOnKeyPressed(e -> {
+    myScene.setOnKeyPressed(e -> {
       myPaddle.handleKeyInput(e.getCode());
       myBall.resetBall(e.getCode());
     });
-    stage.show();
+    myStage.show();
     //Timeline
+    KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY,myPaddle,myBall, wallList,ls));
     Timeline animation = new Timeline();
     animation.setCycleCount(Timeline.INDEFINITE);
-    animation.getKeyFrames().add(new KeyFrame(Duration.seconds(SECOND_DELAY), e -> step(SECOND_DELAY,myPaddle,myBall, wallList)));
+    animation.getKeyFrames().add(frame);
     animation.play();
 
 
 
   }
 
-  public void readLevelInfoInto2DArray(){
+  public void removeBlockFromScene(Rectangle rect){
+      root.getChildren().remove(rect);
+      myScene.setRoot(root);
+      myStage.setScene(myScene);
+
 
   }
 
+  public void addLevelLayoutToRoot(LevelSetup ls){
+    for (int i = 0; i < ls.fileRowNumber; i++) {
+      for (int j = 0; j < ls.fileColumnNumber; j++) {
+        root.getChildren().add(ls.myBlocks[i][j]);
+      }
+      }
+  }
 
-  public void step(double elapsedTime, Paddle myPaddle, Ball myBall, ArrayList<Rectangle> walls){
+
+  public void step(double elapsedTime, Paddle myPaddle, Ball myBall, ArrayList<Rectangle> walls,LevelSetup ls){
 
 
     myBall.move(elapsedTime);
-    myBall.horizontalDeflectBall(walls);
+    myBall.wallDeflectBall(walls);
     myBall.paddleDeflectBall(myPaddle);
+    ls.checkAndHandleBallBlockCollision(myBall,root,myScene);
+
   }
 
 

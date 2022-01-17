@@ -16,7 +16,7 @@ public class Ball {
     private final double DEFAULT_X_POS ;
     private final double DEFAULT_Y_POS ;
     private final int DEFAULT_BALL_SPEED_Y=90;
-    private final int EPSILON=1;
+    private final double EPSILON=5;
 
 
     private Circle ball;
@@ -60,21 +60,29 @@ public class Ball {
         }
     }
 
-    public void horizontalDeflectBall( ArrayList<Rectangle> myRects){
+    public void wallDeflectBall( ArrayList<Rectangle> myRects){
+
         for(Rectangle myRect : myRects){
 
+            boolean intersectBool=checkBlockIntersectionAndDeflectBall(myRect, Main.WALL_WIDTH);
+        }
+    }
 
+    public boolean checkBlockIntersectionAndDeflectBall(Rectangle myRect, double blockWidth) {
+        boolean intersectionCheck=false;
         if(ball.intersects( myRect.getBoundsInLocal())){
-                if(approximatelyEqual(myRect.getX(),ball.getCenterX()+ball.getRadius()) || approximatelyEqual(myRect.getX(),ball.getCenterX()-ball.getRadius())
-                    || approximatelyEqual(myRect.getX()+20,ball.getCenterX()-ball.getRadius()) || approximatelyEqual(myRect.getX()+20,ball.getCenterX()+ball.getRadius())){
-                    ballSpeed=new Point2D(-ballSpeed.getX(), ballSpeed.getY());
+                intersectionCheck=true;
+                if(myRect.getX() <= ball.getCenterX() && myRect.getX()+blockWidth >= ball.getCenterX()){
+
+                    ballSpeed=new Point2D(ballSpeed.getX(), -ballSpeed.getY());
+
                 }
                 else{
-                    ballSpeed=new Point2D(ballSpeed.getX(), -ballSpeed.getY());
+                    ballSpeed=new Point2D(-ballSpeed.getX(), ballSpeed.getY());
                 }
 
             }
-        }
+        return intersectionCheck;
     }
 
     public boolean approximatelyEqual (double coord1, double coord2) {
