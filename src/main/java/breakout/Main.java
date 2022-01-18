@@ -1,6 +1,7 @@
 package breakout;
 
 import java.util.ArrayList;
+import java.util.Random;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -40,7 +41,7 @@ public class Main extends Application {
    */
   @Override
   public void start(Stage stage) throws Exception {
-    Ball myBall = new Ball(SIZE_HORIZONTAL/2, WALL_SIZE_VERTICAL, BALL_RADIUS,SIZE_HORIZONTAL,SIZE_VERTICAL);
+    Ball myBall = new Ball(SIZE_HORIZONTAL/2, WALL_SIZE_VERTICAL, BALL_RADIUS);
 
     Paddle myPaddle = new Paddle(PADDLE_START_POSITION, WALL_SIZE_VERTICAL,SIZE_HORIZONTAL,SIZE_VERTICAL);
 
@@ -106,11 +107,7 @@ public class Main extends Application {
 
   public void addLevelLayoutToRoot(LevelSetup ls){
     for (int i = 0; i < ls.fileRowNumber; i++) {
-      System.out.println("i");
-      System.out.println(i);
       for (int j = 0; j < ls.fileColumnNumber; j++) {
-        System.out.println("j");
-        System.out.println(j);
         if(ls.myBlocks[i][j]!=null) {
           root.getChildren().add(ls.myBlocks[i][j]);
         }
@@ -126,6 +123,10 @@ public class Main extends Application {
     myBall.wallDeflectBall(walls);
     myBall.paddleDeflectBall(myPaddle);
     ls.checkAndHandleBallBlockCollision(myBall,root,myScene);
+    if(ls.availablePowerUp){
+      ls.newPowerUp.move(elapsedTime);
+      ls.handlePowerUp(root,myScene,elapsedTime,myBall,myPaddle);
+    }
 
   }
 

@@ -33,6 +33,8 @@ public class LevelSetup {
   public Group blockGroup = new Group();
   public Rectangle removeBlock = null;
   public int[][] blockHealth ;
+  public boolean availablePowerUp=false;
+  public PowerUp newPowerUp;
 
   public void readFileTo2DArray(int i) throws Exception {
     File levelFile = new File(FILEPATH + LEVELS[i]);
@@ -75,7 +77,6 @@ public class LevelSetup {
         newBlock.setStroke(Color.BLACK);
         startXPos = startXPos + levelBlockSize + GAP_BETWEEN_BLOCKS;
         int currentBlockType = blockInfoMatrix.get(i).get(j);
-        System.out.print(currentBlockType);
 
         if (currentBlockType != 5) {
 
@@ -93,7 +94,6 @@ public class LevelSetup {
 
         }
       }
-      System.out.println();
       startYPos = startYPos + levelBlockSize + GAP_BETWEEN_BLOCKS;
     }
 
@@ -111,9 +111,7 @@ public class LevelSetup {
         } else {
           blockHealth[i][j] = 1;
         }
-        System.out.print(blockHealth[i][j]);
       }
-      System.out.println();
     }
   }
 
@@ -125,12 +123,17 @@ public class LevelSetup {
           Rectangle currentBlock = myBlocks[i][j];
           if (myBall.checkBlockIntersectionAndDeflectBall(currentBlock, levelBlockSize) ) {
             blockHealth[i][j]--;
-            System.out.println(blockHealth[i][j]);
             if(blockHealth[i][j]==0){
-              System.out.println("TRUE");
+              if(blockInfoMatrix.get(i).get(j)==2) {
+                newPowerUp = new PowerUp(myBlocks[i][j].getX() + levelBlockSize / 2,
+                    myBlocks[i][j].getY() + levelBlockSize / 2);
+                availablePowerUp=true;
+                root.getChildren().add(newPowerUp.getBallNode());
+              }
               root.getChildren().remove(myBlocks[i][j]);
               blockInfoMatrix.get(i).set(j,5);
               scene.setRoot(root);
+
             }
           }
         }
@@ -138,5 +141,10 @@ public class LevelSetup {
     }
   }
 
+  public void handlePowerUp(Group root, Scene scene, double elapsedTime,Ball myBall, Paddle myPaddle) {
+
+    newPowerUp.checkPowerUpActions(myPaddle,myBall,root,scene);
+
+  }
 
 }

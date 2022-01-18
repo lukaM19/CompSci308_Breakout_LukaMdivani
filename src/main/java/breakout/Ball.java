@@ -22,7 +22,7 @@ public class Ball {
     private Circle ball;
     private Point2D ballSpeed;
 
-    public Ball(double xPos, double yPos, double ballRadius,int width, int height) {
+    public Ball(double xPos, double yPos, double ballRadius) {
         ball = new Circle();
         ball.setCenterX(xPos);
         ball.setCenterY(yPos);
@@ -97,4 +97,7 @@ public class Ball {
         }
     }
 
+    protected void ballGetPowerUp() {
+        ballSpeed=new Point2D(1.05*ballSpeed.getX(),1.05*ballSpeed.getY());
+    }
 }

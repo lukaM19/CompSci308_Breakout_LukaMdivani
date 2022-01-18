@@ -11,7 +11,6 @@ public class Paddle {
   private static final double DEFAULT_SPEED = 0.0;
   private static final double PADDLE_SPEED = 10.0;
   public static final double DEFAULT_PADDLE_WIDTH = 50.0;
-  public static final double LARGE_PADDLE_WIDTH = 150.0;
   private static final double PADDLE_HEIGHT = 20.0;
   public static final int BORDER_CHANGE_CUTOFF = 5;
   public  final int WINDOW_WIDTH;
@@ -94,4 +93,8 @@ public class Paddle {
     }
   }
 
+  public void paddleGetPowerUp() {
+    paddle.setWidth(1.02* paddle.getWidth());
+
+  }
 }
