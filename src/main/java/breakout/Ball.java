@@ -73,7 +73,6 @@ public class Ball {
         if(ball.intersects( myRect.getBoundsInLocal())){
                 intersectionCheck=true;
                 if(myRect.getX() <= ball.getCenterX() && myRect.getX()+blockWidth >= ball.getCenterX()){
-
                     ballSpeed=new Point2D(ballSpeed.getX(), -ballSpeed.getY());
 
                 }

@@ -64,7 +64,7 @@ public class Main extends Application {
     wallList.add(sideWallRight);
 
     LevelSetup ls =new LevelSetup();
-    ls.readFileTo2DArray(1);
+    ls.readFileTo2DArray(2);
     ls.getBlockHealthInfo();
     ls.createBlocks();
 
@@ -106,8 +106,14 @@ public class Main extends Application {
 
   public void addLevelLayoutToRoot(LevelSetup ls){
     for (int i = 0; i < ls.fileRowNumber; i++) {
+      System.out.println("i");
+      System.out.println(i);
       for (int j = 0; j < ls.fileColumnNumber; j++) {
-        root.getChildren().add(ls.myBlocks[i][j]);
+        System.out.println("j");
+        System.out.println(j);
+        if(ls.myBlocks[i][j]!=null) {
+          root.getChildren().add(ls.myBlocks[i][j]);
+        }
       }
       }
   }
