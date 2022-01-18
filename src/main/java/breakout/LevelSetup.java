@@ -22,19 +22,17 @@ public class LevelSetup {
   private static final double GAP_BETWEEN_BLOCKS = 0.0;
   private static final double DEFAULT_BLOCK_COORDINATE = Main.WALL_WIDTH + 0.5 * GAP_BETWEEN_BLOCKS;
 
-  public int fileColumnNumber = 0;
-  public int fileRowNumber = 0;
+  private int fileColumnNumber = 0;
+  private int fileRowNumber = 0;
   private double levelBlockSize;
 
   private double startYPos = DEFAULT_BLOCK_COORDINATE;
   private double startXPos = DEFAULT_BLOCK_COORDINATE;
   private ArrayList<ArrayList<Integer>> blockInfoMatrix = new ArrayList<ArrayList<Integer>>();
-  public Rectangle[][] myBlocks;
-  public Group blockGroup = new Group();
-  public Rectangle removeBlock = null;
-  public int[][] blockHealth ;
-  public boolean availablePowerUp=false;
-  public PowerUp newPowerUp;
+  private Rectangle[][] myBlocks;
+  private int[][] blockHealth ;
+  private boolean availablePowerUp=false;
+  private ArrayList<PowerUp> availblePowerUps= new ArrayList<>();
 
   public void readFileTo2DArray(int i) throws Exception {
     File levelFile = new File(FILEPATH + LEVELS[i]);
@@ -68,7 +66,6 @@ public class LevelSetup {
     levelBlockSize =
         (Main.SIZE_HORIZONTAL - 2 * Main.WALL_WIDTH - fileColumnNumber * GAP_BETWEEN_BLOCKS)
             / fileColumnNumber;
-    blockGroup = new Group();
     myBlocks = new Rectangle[fileRowNumber][fileColumnNumber];
     for (int i = 0; i < fileRowNumber; i++) {
       startXPos = DEFAULT_BLOCK_COORDINATE;
@@ -89,7 +86,6 @@ public class LevelSetup {
           } else if (currentBlockType == 0) {
             newBlock.setFill(Color.DARKGRAY);
           }
-          blockGroup.getChildren().add(newBlock);
           myBlocks[i][j] = newBlock;
 
         }
@@ -115,6 +111,16 @@ public class LevelSetup {
     }
   }
 
+  public void addLevelLayoutToRoot(Group root){
+    for (int i = 0; i < fileRowNumber; i++) {
+      for (int j = 0; j < fileColumnNumber; j++) {
+        if(myBlocks[i][j]!=null) {
+          root.getChildren().add(myBlocks[i][j]);
+        }
+      }
+    }
+  }
+
   public void checkAndHandleBallBlockCollision(Ball myBall,Group root, Scene scene) {
 
     for (int i = 0; i < fileRowNumber; i++) {
@@ -125,14 +131,9 @@ public class LevelSetup {
             blockHealth[i][j]--;
             if(blockHealth[i][j]==0){
               if(blockInfoMatrix.get(i).get(j)==2) {
-                newPowerUp = new PowerUp(myBlocks[i][j].getX() + levelBlockSize / 2,
-                    myBlocks[i][j].getY() + levelBlockSize / 2);
-                availablePowerUp=true;
-                root.getChildren().add(newPowerUp.getBallNode());
+                createAndAddPowerUpToRoot(root, i, j);
               }
-              root.getChildren().remove(myBlocks[i][j]);
-              blockInfoMatrix.get(i).set(j,5);
-              scene.setRoot(root);
+              removeDestroyedBlockFromRoot(root, scene, i, j);
 
             }
           }
@@ -141,10 +142,33 @@ public class LevelSetup {
     }
   }
 
+  private void removeDestroyedBlockFromRoot(Group root, Scene scene, int i, int j) {
+    root.getChildren().remove(myBlocks[i][j]);
+    blockInfoMatrix.get(i).set(j,5);
+    scene.setRoot(root);
+  }
+
+  private void createAndAddPowerUpToRoot(Group root, int i, int j) {
+    PowerUp newPowerUp=new PowerUp(myBlocks[i][j].getX() + levelBlockSize / 2,
+        myBlocks[i][j].getY() + levelBlockSize / 2);
+    availblePowerUps.add( newPowerUp);
+    availablePowerUp=true;
+    root.getChildren().add(newPowerUp.getBallNode());
+  }
+
   public void handlePowerUp(Group root, Scene scene, double elapsedTime,Ball myBall, Paddle myPaddle) {
-
-    newPowerUp.checkPowerUpActions(myPaddle,myBall,root,scene);
-
+    if (availablePowerUp) {
+      ArrayList<PowerUp> removablePowerUps= new ArrayList<>();
+      for (PowerUp currentPowerUp : availblePowerUps) {
+        currentPowerUp.move(elapsedTime);
+        if(currentPowerUp.checkPowerUpActions(myPaddle, myBall, root, scene)){
+          removablePowerUps.add(currentPowerUp);
+        }
+      }
+      for(PowerUp currentPowerUp:removablePowerUps ){
+        availblePowerUps.remove(currentPowerUp);
+      }
+    }
   }
 
 }

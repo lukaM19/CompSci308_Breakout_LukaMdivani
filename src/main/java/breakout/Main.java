@@ -74,7 +74,7 @@ public class Main extends Application {
     root.getChildren().add(myBall.getBallNode());
     root.getChildren().add(myPaddle.getPaddleNode());
     root.getChildren().add(walls);
-    addLevelLayoutToRoot(ls);
+    ls.addLevelLayoutToRoot(root);
     myScene = new Scene(root, SIZE_HORIZONTAL, SIZE_VERTICAL, Color.DARKBLUE);
     myStage.setScene(myScene);
 
@@ -105,15 +105,7 @@ public class Main extends Application {
 
   }
 
-  public void addLevelLayoutToRoot(LevelSetup ls){
-    for (int i = 0; i < ls.fileRowNumber; i++) {
-      for (int j = 0; j < ls.fileColumnNumber; j++) {
-        if(ls.myBlocks[i][j]!=null) {
-          root.getChildren().add(ls.myBlocks[i][j]);
-        }
-      }
-      }
-  }
+
 
 
   public void step(double elapsedTime, Paddle myPaddle, Ball myBall, ArrayList<Rectangle> walls,LevelSetup ls){
@@ -123,10 +115,8 @@ public class Main extends Application {
     myBall.wallDeflectBall(walls);
     myBall.paddleDeflectBall(myPaddle);
     ls.checkAndHandleBallBlockCollision(myBall,root,myScene);
-    if(ls.availablePowerUp){
-      ls.newPowerUp.move(elapsedTime);
-      ls.handlePowerUp(root,myScene,elapsedTime,myBall,myPaddle);
-    }
+    ls.handlePowerUp(root,myScene,elapsedTime,myBall,myPaddle);
+
 
   }
 
