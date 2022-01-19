@@ -179,7 +179,7 @@ public class LevelSetup {
       ArrayList<PowerUp> removablePowerUps= new ArrayList<>();
       for (PowerUp currentPowerUp : availblePowerUps) {
         currentPowerUp.move(elapsedTime);
-        if(currentPowerUp.checkPowerUpActions(myPaddle, myBall, root, scene)){
+        if(currentPowerUp.checkPowerUpStatus(myPaddle, myBall, root, scene)){
           removablePowerUps.add(currentPowerUp);
         }
       }
@@ -189,4 +189,17 @@ public class LevelSetup {
     }
   }
 
+  public boolean checkWinCondition(){
+    boolean wonGame=true;
+    for (int i = 0; i < fileRowNumber; i++) {
+      for (int j = 0; j < fileColumnNumber; j++) {
+          if(blockHealth[i][j]>0)
+          {
+            wonGame=false;
+          }
+      }
+
+    }
+    return  wonGame;
+  }
 }

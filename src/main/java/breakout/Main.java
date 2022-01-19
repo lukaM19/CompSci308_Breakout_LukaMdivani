@@ -40,6 +40,7 @@ public class Main extends Application {
   private Ball myBall;
   private Paddle myPaddle;
   private static int playerLives=3;
+  private int curLevelID=0;
   /**
    * Initialize what will be displayed.
    */
@@ -51,7 +52,7 @@ public class Main extends Application {
 
     myStage=stage;
 
-    root =setUpRoot(myBall, myPaddle,0);
+    root =setUpRoot(myBall, myPaddle,curLevelID);
 
     myScene = new Scene(root, SIZE_HORIZONTAL, SIZE_VERTICAL, Color.DARKBLUE);
     myStage.setScene(myScene);
@@ -69,7 +70,13 @@ public class Main extends Application {
     });
     myStage.show();
     //Timeline
-    KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY,myPaddle,myBall));
+    KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> {
+      try {
+        step(SECOND_DELAY,myPaddle,myBall);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    });
     Timeline animation = new Timeline();
     animation.setCycleCount(Timeline.INDEFINITE);
     animation.getKeyFrames().add(frame);
@@ -95,29 +102,36 @@ public class Main extends Application {
 
 
   public void changeLevel(int levelId) throws Exception {
-    System.out.println("test");
-
+    resetPaddleAndBall();
     root=setUpRoot(myBall, myPaddle,levelId);
+
     myScene.setRoot(root);
     myStage.setScene(myScene);
   }
 
   public void cheatKeys(KeyCode code) throws Exception {
     switch (code){
-      case DIGIT0 -> changeLevel(0);
-      case DIGIT1 -> changeLevel(1);
-      case DIGIT2 -> changeLevel(2);
-      case R -> {myBall.resetBall();myPaddle.resetPaddleLocation();}
+      case DIGIT1 -> {changeLevel(0); curLevelID=0;}
+      case DIGIT2 -> {changeLevel(1);curLevelID=1;}
+      case DIGIT3 -> {changeLevel(2);curLevelID=2;}
+      case R -> resetPaddleAndBall();
       case L -> increaseLives();
       case E -> myPaddle.paddleGetPowerUp();
       case S -> myBall.ballCheatSlowDown();
 
     }
   }
+  public void resetPaddleAndBall() {myBall.resetBall();myPaddle.resetPaddleLocation();}
+  public void autoIncreaseLevels() throws Exception{
+    curLevelID=curLevelID+1;
+    if (curLevelID<3){
+    changeLevel(curLevelID);
+    }
+  }
   public static void increaseLives(){
     playerLives=playerLives+3;
   }
-  public void step(double elapsedTime, Paddle myPaddle, Ball myBall){
+  public void step(double elapsedTime, Paddle myPaddle, Ball myBall) throws Exception {
 
 
     myBall.move(elapsedTime);
@@ -130,8 +144,10 @@ public class Main extends Application {
       myBall.resetBall();
       myPaddle.resetPaddleLocation();
     }
-    System.out.println(playerLives);
-
+    if(playerLives<0)
+    {System.out.println("GAME OVER");}
+    if(myLevel.checkWinCondition())
+    { autoIncreaseLevels();}
   }
 
 

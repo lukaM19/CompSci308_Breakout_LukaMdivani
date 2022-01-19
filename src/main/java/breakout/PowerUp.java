@@ -1,14 +1,11 @@
 package breakout;
 
 
-import java.util.List;
 import java.util.Random;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.effect.Lighting;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 public class PowerUp extends Ball {
   private final double DEFAULT_X_SPEED=0;
@@ -39,7 +36,7 @@ public class PowerUp extends Ball {
     super.move(elapsedTime);
   }
 
-  public boolean checkPowerUpActions(Paddle myPaddle,Ball myBall, Group root, Scene scene) {
+  public boolean checkPowerUpStatus(Paddle myPaddle,Ball myBall, Group root, Scene scene) {
     boolean powerUpDestroyed=false;
     if(this.getBallNode().intersects( myPaddle.getPaddleNode().getBoundsInLocal())){
 
