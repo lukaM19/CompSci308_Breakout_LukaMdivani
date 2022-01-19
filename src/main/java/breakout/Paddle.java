@@ -85,12 +85,6 @@ public class Paddle {
 
     }
     handleBorderChange();
-    if (paddleVerticalMove) {
-      switch (code) {
-        case UP -> paddle.setY(paddle.getY() - PADDLE_SPEED);
-        case DOWN -> paddle.setY(paddle.getY() + PADDLE_SPEED);
-      }
-    }
   }
 
   public void paddleGetPowerUp() {
@@ -98,12 +92,11 @@ public class Paddle {
 
   }
 
-  public void resetPaddleLocation(KeyCode code) {
-    if (code==KeyCode.Q) {
+  public void resetPaddleLocation() {
       paddle.setX(DEFAULT_PADDLE_X_POS);
       paddle.setY(DEFAULT_PADDLE_Y_POS+PADDLE_HEIGHT);
       paddle.setWidth(DEFAULT_PADDLE_WIDTH);
-    }
+
   }
 
 

@@ -16,6 +16,9 @@ public class LevelSetup {
   private static final String FILEPATH = "D:\\CS308\\breakout_lm378\\src\\main\\resources\\";
   private static final double GAP_BETWEEN_BLOCKS = 0.0;
   private static final double DEFAULT_BLOCK_COORDINATE = Main.WALL_WIDTH + 0.5 * GAP_BETWEEN_BLOCKS;
+  public static final int WALL_SIZE_HORIZONTAL = 290;
+  public static final int WALL_SIZE_VERTICAL = 350;
+  public static final int WALL_WIDTH = 20;
 
   private int fileColumnNumber = 0;
   private int fileRowNumber = 0;
@@ -28,8 +31,7 @@ public class LevelSetup {
   private int[][] blockHealth ;
   private boolean availablePowerUp=false;
   private ArrayList<PowerUp> availblePowerUps= new ArrayList<>();
-  private Group walls;
-
+  private ArrayList<Wall> levelWallList = new ArrayList<>();
 
   public void readFileTo2DArray(int i) throws Exception {
     File levelFile = new File(FILEPATH + LEVELS[i]);
@@ -120,6 +122,21 @@ public class LevelSetup {
     }
   }
 
+
+  public Group createWalls(){
+    Group walls = new Group();
+
+    Wall topWall = new Wall(0,0,WALL_SIZE_HORIZONTAL,WALL_WIDTH);
+    Wall sideWallLeft = new Wall(270,20,WALL_WIDTH,WALL_SIZE_VERTICAL);
+    Wall sideWallRight = new Wall(  0,20,WALL_WIDTH,WALL_SIZE_VERTICAL);
+
+    walls.getChildren().addAll(topWall.getWallNode(),sideWallLeft.getWallNode(),sideWallRight.getWallNode());
+    levelWallList.add(topWall);
+    levelWallList.add(sideWallLeft);
+    levelWallList.add(sideWallRight);
+    return walls;
+  }
+  public ArrayList<Wall> getLevelWallList(){return levelWallList;}
 
 
   public void checkAndHandleBallBlockCollision(Ball myBall,Group root, Scene scene) {

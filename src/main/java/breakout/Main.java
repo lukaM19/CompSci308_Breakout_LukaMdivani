@@ -28,44 +28,30 @@ public class Main extends Application {
   public static final int FRAMES_PER_SECOND = 60;
   public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
   public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-  public static final int WALL_SIZE_HORIZONTAL = 290;
   public static final int WALL_SIZE_VERTICAL = 350;
   public static final int WALL_WIDTH = 20;
   public static final int BALL_RADIUS=10;
   private Group root;
   private Stage myStage;
   private Scene myScene;
+  private LevelSetup myLevel;
+  private Group walls;
+  private ArrayList<Wall> wallList;
+  private Ball myBall;
+  private Paddle myPaddle;
+  private static int playerLives=3;
   /**
    * Initialize what will be displayed.
    */
   @Override
   public void start(Stage stage) throws Exception {
-    Ball myBall = new Ball(SIZE_HORIZONTAL/2, WALL_SIZE_VERTICAL, BALL_RADIUS);
+    myBall = new Ball(SIZE_HORIZONTAL/2, WALL_SIZE_VERTICAL, BALL_RADIUS);
 
-    Paddle myPaddle = new Paddle(PADDLE_START_POSITION, WALL_SIZE_VERTICAL,SIZE_HORIZONTAL,SIZE_VERTICAL);
+    myPaddle = new Paddle(PADDLE_START_POSITION, WALL_SIZE_VERTICAL,SIZE_HORIZONTAL,SIZE_VERTICAL);
 
     myStage=stage;
-    ArrayList<Wall> wallList
-        = new ArrayList<>();
-    Group walls = new Group();
 
-    Wall topWall = new Wall(0,0,WALL_SIZE_HORIZONTAL,WALL_WIDTH);
-    Wall sideWallLeft = new Wall(270,20,WALL_WIDTH,WALL_SIZE_VERTICAL);
-    Wall sideWallRight = new Wall(  0,20,WALL_WIDTH,WALL_SIZE_VERTICAL);
-
-    walls.getChildren().addAll(topWall.getWallNode(),sideWallLeft.getWallNode(),sideWallRight.getWallNode());
-    wallList.add(topWall);
-    wallList.add(sideWallLeft);
-    wallList.add(sideWallRight);
-
-    LevelSetup ls =new LevelSetup();
-    ls.readFileTo2DArray(2);
-
-
-
-
-    root = new Group();
-    setUpRoot(myBall, myPaddle, walls, ls);
+    root =setUpRoot(myBall, myPaddle,0);
 
     myScene = new Scene(root, SIZE_HORIZONTAL, SIZE_VERTICAL, Color.DARKBLUE);
     myStage.setScene(myScene);
@@ -75,12 +61,15 @@ public class Main extends Application {
 
     myScene.setOnKeyPressed(e -> {
       myPaddle.handleKeyInput(e.getCode());
-      myBall.resetBall(e.getCode());
-      myPaddle.resetPaddleLocation(e.getCode());
+      try {
+        cheatKeys(e.getCode());
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
     });
     myStage.show();
     //Timeline
-    KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY,myPaddle,myBall, wallList,ls));
+    KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step(SECOND_DELAY,myPaddle,myBall));
     Timeline animation = new Timeline();
     animation.setCycleCount(Timeline.INDEFINITE);
     animation.getKeyFrames().add(frame);
@@ -90,36 +79,58 @@ public class Main extends Application {
 
   }
 
-  private void setUpRoot(Ball myBall, Paddle myPaddle, Group walls, LevelSetup ls) {
-    root.getChildren().add(myBall.getBallNode());
-    root.getChildren().add(myPaddle.getPaddleNode());
-    root.getChildren().add(walls);
-    ls.addLevelLayoutToRoot(root);
-  }
+  private Group setUpRoot(Ball myBall, Paddle myPaddle, int levelID) throws Exception {
+    Group newRoot = new Group();
+    myLevel =new LevelSetup();
+    myLevel.readFileTo2DArray(levelID);
+    Group walls=myLevel.createWalls();
+    wallList= myLevel.getLevelWallList();
+    newRoot.getChildren().add(myBall.getBallNode());
+    newRoot.getChildren().add(myPaddle.getPaddleNode());
+    newRoot.getChildren().add(walls);
+    myLevel.addLevelLayoutToRoot(newRoot);
 
-  public void removeBlockFromScene(Rectangle rect){
-      root.getChildren().remove(rect);
-      myScene.setRoot(root);
-      myStage.setScene(myScene);
-
-
-  }
-
-  public void changeLevel(int levelId){
-    root.getChildren().removeAll();
-
+    return newRoot;
   }
 
 
-  public void step(double elapsedTime, Paddle myPaddle, Ball myBall, ArrayList<Wall> walls,LevelSetup ls){
+  public void changeLevel(int levelId) throws Exception {
+    System.out.println("test");
+
+    root=setUpRoot(myBall, myPaddle,levelId);
+    myScene.setRoot(root);
+    myStage.setScene(myScene);
+  }
+
+  public void cheatKeys(KeyCode code) throws Exception {
+    switch (code){
+      case DIGIT0 -> changeLevel(0);
+      case DIGIT1 -> changeLevel(1);
+      case DIGIT2 -> changeLevel(2);
+      case R -> {myBall.resetBall();myPaddle.resetPaddleLocation();}
+      case L -> increaseLives();
+      case E -> myPaddle.paddleGetPowerUp();
+      case S -> myBall.ballCheatSlowDown();
+
+    }
+  }
+  public static void increaseLives(){
+    playerLives=playerLives+3;
+  }
+  public void step(double elapsedTime, Paddle myPaddle, Ball myBall){
 
 
     myBall.move(elapsedTime);
-    myBall.wallDeflectBall(walls);
+    myBall.wallDeflectBall(wallList);
     myBall.paddleDeflectBall(myPaddle);
-    ls.checkAndHandleBallBlockCollision(myBall,root,myScene);
-    ls.handlePowerUp(root,myScene,elapsedTime,myBall,myPaddle);
-
+    myLevel.checkAndHandleBallBlockCollision(myBall,root,myScene);
+    myLevel.handlePowerUp(root,myScene,elapsedTime,myBall,myPaddle);
+    if (myBall.checkBallOutofBounds()){
+      playerLives--;
+      myBall.resetBall();
+      myPaddle.resetPaddleLocation();
+    }
+    System.out.println(playerLives);
 
   }
 

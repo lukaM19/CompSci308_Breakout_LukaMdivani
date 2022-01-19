@@ -44,7 +44,7 @@ public class PowerUp extends Ball {
     if(this.getBallNode().intersects( myPaddle.getPaddleNode().getBoundsInLocal())){
 
         if(powerUpType==0) {myBall.ballGetPowerUp();}
-        if(powerUpType==1){System.out.println("TEmp");}
+        if(powerUpType==1){Main.increaseLives() ;}
         if(powerUpType==2) {myPaddle.paddleGetPowerUp();}
         root.getChildren().remove(this.getBallNode());
         scene.setRoot(root);
@@ -52,7 +52,7 @@ public class PowerUp extends Ball {
 
 
     }
-    else if(this.getBallNode().getCenterY()>=Main.SIZE_VERTICAL){
+    else if(this.checkBallOutofBounds()){
       root.getChildren().remove(this.getBallNode());
       scene.setRoot(root);
       powerUpDestroyed=true;

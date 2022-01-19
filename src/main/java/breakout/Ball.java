@@ -19,6 +19,7 @@ public class Ball {
     private final int DEFAULT_BALL_SPEED_X=1;
     private final double EDGE_DEFLECT_ANGLE_INCREMENT=15.0;
     private final double BALL_SPEED_POWER_UP_FACTOR=1.05;
+    private final double BALL_SPEED_SLOW_FACTOR=0.7;
 
     private Circle ball;
     private Point2D ballSpeed;
@@ -86,17 +87,24 @@ public class Ball {
     }
 
 
-    public void resetBall(KeyCode code){
-        if (code==KeyCode.Q){
+    public void resetBall(){
+
             ball.setCenterX(DEFAULT_X_POS);
             ball.setCenterY(DEFAULT_Y_POS);
             ballSpeed=new Point2D(DEFAULT_BALL_SPEED_X,DEFAULT_BALL_SPEED_Y);
-        }
+
     }
 
     public void ballGetPowerUp() {
         ballSpeed=new Point2D(BALL_SPEED_POWER_UP_FACTOR*ballSpeed.getX(),BALL_SPEED_POWER_UP_FACTOR*ballSpeed.getY());
     }
 
+    public void ballCheatSlowDown() {
+        ballSpeed=new Point2D(BALL_SPEED_SLOW_FACTOR*ballSpeed.getX(),BALL_SPEED_SLOW_FACTOR*ballSpeed.getY());
+    }
+
+    public boolean checkBallOutofBounds() {
+        return ball.getCenterY()>=Main.SIZE_VERTICAL;
+    }
 
 }
