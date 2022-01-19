@@ -43,13 +43,13 @@ the ball would fall and bounce among many blocks, which needed different amount 
 
 ## Cheat Key Ideas
 
- * Drops a power up instantly
+ * Drops a power up instantly -> S
 
- * adds 3 lives
+ * adds 3 lives -> L
 
- * make paddle larger
+ * make paddle larger -> E
 
- * makes the ball slower
+ * makes the ball slower -> S
 
 
 ## Level Descriptions
@@ -68,7 +68,7 @@ Key for .txt files:
 * 2 - power-up blocks
 * 3 - harder block(take 2 shots to break)
 * 0 - permanent blocks
-* X - Empty Space
+* 5 - Empty Space
 
 
 ## Class Ideas

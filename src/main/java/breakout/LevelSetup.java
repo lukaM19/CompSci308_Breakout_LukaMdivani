@@ -23,14 +23,14 @@ public class LevelSetup {
   private int fileColumnNumber = 0;
   private int fileRowNumber = 0;
   private double levelBlockSize;
-  private static int lives=3;
+  private static int lives = 3;
   private double startYPos = DEFAULT_BLOCK_COORDINATE;
   private double startXPos = DEFAULT_BLOCK_COORDINATE;
   private ArrayList<ArrayList<Integer>> blockInfoMatrix = new ArrayList<ArrayList<Integer>>();
   private Rectangle[][] myBlocks;
-  private int[][] blockHealth ;
-  private boolean availablePowerUp=false;
-  private ArrayList<PowerUp> availblePowerUps= new ArrayList<>();
+  private int[][] blockHealth;
+  private boolean availablePowerUp = false;
+  private ArrayList<PowerUp> availblePowerUps = new ArrayList<>();
   private ArrayList<Wall> levelWallList = new ArrayList<>();
 
   public void readFileTo2DArray(int i) throws Exception {
@@ -98,12 +98,12 @@ public class LevelSetup {
   }
 
   public void getBlockHealthInfo() {
-     blockHealth = new int[fileRowNumber][fileColumnNumber];
+    blockHealth = new int[fileRowNumber][fileColumnNumber];
     for (int i = 0; i < fileRowNumber; i++) {
       for (int j = 0; j < fileColumnNumber; j++) {
         if (blockInfoMatrix.get(i).get(j) == 3) {
           blockHealth[i][j] = 2;
-        } else if (blockInfoMatrix.get(i).get(j) == 0) {
+        } else if (blockInfoMatrix.get(i).get(j) == 0 || blockInfoMatrix.get(i).get(j) == 5) {
           blockHealth[i][j] = 0;
         } else {
           blockHealth[i][j] = 1;
@@ -112,10 +112,10 @@ public class LevelSetup {
     }
   }
 
-  public void addLevelLayoutToRoot(Group root){
+  public void addLevelLayoutToRoot(Group root) {
     for (int i = 0; i < fileRowNumber; i++) {
       for (int j = 0; j < fileColumnNumber; j++) {
-        if(myBlocks[i][j]!=null) {
+        if (myBlocks[i][j] != null) {
           root.getChildren().add(myBlocks[i][j]);
         }
       }
@@ -123,32 +123,36 @@ public class LevelSetup {
   }
 
 
-  public Group createWalls(){
+  public Group createWalls() {
     Group walls = new Group();
 
-    Wall topWall = new Wall(0,0,WALL_SIZE_HORIZONTAL,WALL_WIDTH);
-    Wall sideWallLeft = new Wall(270,20,WALL_WIDTH,WALL_SIZE_VERTICAL);
-    Wall sideWallRight = new Wall(  0,20,WALL_WIDTH,WALL_SIZE_VERTICAL);
+    Wall topWall = new Wall(0, 0, WALL_SIZE_HORIZONTAL, WALL_WIDTH);
+    Wall sideWallLeft = new Wall(270, 20, WALL_WIDTH, WALL_SIZE_VERTICAL);
+    Wall sideWallRight = new Wall(0, 20, WALL_WIDTH, WALL_SIZE_VERTICAL);
 
-    walls.getChildren().addAll(topWall.getWallNode(),sideWallLeft.getWallNode(),sideWallRight.getWallNode());
+    walls.getChildren()
+        .addAll(topWall.getWallNode(), sideWallLeft.getWallNode(), sideWallRight.getWallNode());
     levelWallList.add(topWall);
     levelWallList.add(sideWallLeft);
     levelWallList.add(sideWallRight);
     return walls;
   }
-  public ArrayList<Wall> getLevelWallList(){return levelWallList;}
+
+  public ArrayList<Wall> getLevelWallList() {
+    return levelWallList;
+  }
 
 
-  public void checkAndHandleBallBlockCollision(Ball myBall,Group root, Scene scene) {
+  public void checkAndHandleBallBlockCollision(Ball myBall, Group root, Scene scene) {
 
     for (int i = 0; i < fileRowNumber; i++) {
       for (int j = 0; j < fileColumnNumber; j++) {
-        if(blockInfoMatrix.get(i).get(j) != 5 ) {
+        if (blockInfoMatrix.get(i).get(j) != 5) {
           Rectangle currentBlock = myBlocks[i][j];
-          if (myBall.checkBlockIntersectionAndDeflectBall(currentBlock, levelBlockSize) ) {
+          if (myBall.checkBlockIntersectionAndDeflectBall(currentBlock, levelBlockSize)) {
             blockHealth[i][j]--;
-            if(blockHealth[i][j]==0){
-              if(blockInfoMatrix.get(i).get(j)==2) {
+            if (blockHealth[i][j] == 0) {
+              if (blockInfoMatrix.get(i).get(j) == 2) {
                 createAndAddPowerUpToRoot(root, i, j);
               }
               removeDestroyedBlockFromRoot(root, scene, i, j);
@@ -162,44 +166,44 @@ public class LevelSetup {
 
   private void removeDestroyedBlockFromRoot(Group root, Scene scene, int i, int j) {
     root.getChildren().remove(myBlocks[i][j]);
-    blockInfoMatrix.get(i).set(j,5);
+    blockInfoMatrix.get(i).set(j, 5);
     scene.setRoot(root);
   }
 
   private void createAndAddPowerUpToRoot(Group root, int i, int j) {
-    PowerUp newPowerUp=new PowerUp(myBlocks[i][j].getX() + levelBlockSize / 2,
+    PowerUp newPowerUp = new PowerUp(myBlocks[i][j].getX() + levelBlockSize / 2,
         myBlocks[i][j].getY() + levelBlockSize / 2);
-    availblePowerUps.add( newPowerUp);
-    availablePowerUp=true;
+    availblePowerUps.add(newPowerUp);
+    availablePowerUp = true;
     root.getChildren().add(newPowerUp.getBallNode());
   }
 
-  public void handlePowerUp(Group root, Scene scene, double elapsedTime,Ball myBall, Paddle myPaddle) {
+  public void handlePowerUp(Group root, Scene scene, double elapsedTime, Ball myBall,
+      Paddle myPaddle) {
     if (availablePowerUp) {
-      ArrayList<PowerUp> removablePowerUps= new ArrayList<>();
+      ArrayList<PowerUp> removablePowerUps = new ArrayList<>();
       for (PowerUp currentPowerUp : availblePowerUps) {
         currentPowerUp.move(elapsedTime);
-        if(currentPowerUp.checkPowerUpStatus(myPaddle, myBall, root, scene)){
+        if (currentPowerUp.checkPowerUpStatus(myPaddle, myBall, root, scene)) {
           removablePowerUps.add(currentPowerUp);
         }
       }
-      for(PowerUp currentPowerUp:removablePowerUps ){
+      for (PowerUp currentPowerUp : removablePowerUps) {
         availblePowerUps.remove(currentPowerUp);
       }
     }
   }
 
-  public boolean checkWinCondition(){
-    boolean wonGame=true;
+  public boolean checkWinCondition() {
+    boolean wonGame = true;
     for (int i = 0; i < fileRowNumber; i++) {
       for (int j = 0; j < fileColumnNumber; j++) {
-          if(blockHealth[i][j]>0)
-          {
-            wonGame=false;
-          }
+        if (blockHealth[i][j] > 0) {
+          wonGame = false;
+        }
       }
 
     }
-    return  wonGame;
+    return wonGame;
   }
 }
