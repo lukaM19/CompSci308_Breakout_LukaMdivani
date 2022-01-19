@@ -3,16 +3,11 @@ package breakout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import java.util.Scanner;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import breakout.Main;
 
 
 public class LevelSetup {
@@ -25,7 +20,7 @@ public class LevelSetup {
   private int fileColumnNumber = 0;
   private int fileRowNumber = 0;
   private double levelBlockSize;
-
+  private static int lives=3;
   private double startYPos = DEFAULT_BLOCK_COORDINATE;
   private double startXPos = DEFAULT_BLOCK_COORDINATE;
   private ArrayList<ArrayList<Integer>> blockInfoMatrix = new ArrayList<ArrayList<Integer>>();
@@ -33,6 +28,8 @@ public class LevelSetup {
   private int[][] blockHealth ;
   private boolean availablePowerUp=false;
   private ArrayList<PowerUp> availblePowerUps= new ArrayList<>();
+  private Group walls;
+
 
   public void readFileTo2DArray(int i) throws Exception {
     File levelFile = new File(FILEPATH + LEVELS[i]);
@@ -60,6 +57,8 @@ public class LevelSetup {
       blockInfoMatrix.add(currentRowElements);
       fileRowNumber++;
     }
+    getBlockHealthInfo();
+    createBlocks();
   }
 
   public void createBlocks() {
@@ -120,6 +119,8 @@ public class LevelSetup {
       }
     }
   }
+
+
 
   public void checkAndHandleBallBlockCollision(Ball myBall,Group root, Scene scene) {
 

@@ -10,11 +10,11 @@ public class Paddle {
 
   private static final double DEFAULT_SPEED = 0.0;
   private static final double PADDLE_SPEED = 10.0;
-  public static final double DEFAULT_PADDLE_WIDTH = 50.0;
+  private static final double DEFAULT_PADDLE_WIDTH = 50.0;
   private static final double PADDLE_HEIGHT = 20.0;
-  public static final int BORDER_CHANGE_CUTOFF = 5;
-  public  final int WINDOW_WIDTH;
-  public final int WINDOW_HEIGHT;
+  private final double PADDLE_WIDTH_POWER_UP_FACTOR=1.02;
+  private  final double DEFAULT_PADDLE_X_POS;
+  private final double DEFAULT_PADDLE_Y_POS;
 
   private Rectangle paddle;
   private double paddleSpeed;
@@ -31,8 +31,8 @@ public class Paddle {
     paddle.setEffect(new Lighting());
     paddleSpeed = DEFAULT_SPEED;
     paddleVerticalMove = false;
-    WINDOW_WIDTH= width;
-    WINDOW_HEIGHT= height;
+    DEFAULT_PADDLE_X_POS= xPos;
+    DEFAULT_PADDLE_Y_POS= yPos;
 
 
   }
@@ -94,7 +94,17 @@ public class Paddle {
   }
 
   public void paddleGetPowerUp() {
-    paddle.setWidth(1.02* paddle.getWidth());
+    paddle.setWidth(PADDLE_WIDTH_POWER_UP_FACTOR* paddle.getWidth());
 
   }
+
+  public void resetPaddleLocation(KeyCode code) {
+    if (code==KeyCode.Q) {
+      paddle.setX(DEFAULT_PADDLE_X_POS);
+      paddle.setY(DEFAULT_PADDLE_Y_POS+PADDLE_HEIGHT);
+      paddle.setWidth(DEFAULT_PADDLE_WIDTH);
+    }
+  }
+
+
 }

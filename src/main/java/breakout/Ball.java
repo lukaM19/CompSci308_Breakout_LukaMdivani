@@ -16,8 +16,9 @@ public class Ball {
     private final double DEFAULT_X_POS ;
     private final double DEFAULT_Y_POS ;
     private final int DEFAULT_BALL_SPEED_Y=90;
-    private final double EPSILON=5;
-
+    private final int DEFAULT_BALL_SPEED_X=1;
+    private final double EDGE_DEFLECT_ANGLE_INCREMENT=15.0;
+    private final double BALL_SPEED_POWER_UP_FACTOR=1.05;
 
     private Circle ball;
     private Point2D ballSpeed;
@@ -30,7 +31,7 @@ public class Ball {
         ball.setFill(Color.HOTPINK);
         ball.setStroke(Color.BLACK);
         ball.setEffect(new Lighting());
-        ballSpeed = new Point2D(0,DEFAULT_BALL_SPEED_Y);
+        ballSpeed = new Point2D(DEFAULT_BALL_SPEED_X,DEFAULT_BALL_SPEED_Y);
         DEFAULT_X_POS= xPos;
         DEFAULT_Y_POS= yPos;
 
@@ -48,11 +49,11 @@ public class Ball {
     public void paddleDeflectBall(Paddle myPaddle){
         if(ball.intersects( myPaddle.getPaddleNode().getBoundsInLocal())){
 
-            if (   ball.getCenterX() >= myPaddle.getXPos()+0.75*myPaddle.DEFAULT_PADDLE_WIDTH){
-                ballSpeed=new Point2D(ballSpeed.getX()+15, -ballSpeed.getY());
+            if (   ball.getCenterX() >= myPaddle.getXPos()+0.75*myPaddle.getPaddleNode().getWidth()){
+                ballSpeed=new Point2D(ballSpeed.getX()+EDGE_DEFLECT_ANGLE_INCREMENT, -ballSpeed.getY());
             }
-            else if (ball.getCenterX() <= myPaddle.getXPos()+0.25*myPaddle.DEFAULT_PADDLE_WIDTH){
-                ballSpeed=new Point2D(ballSpeed.getX()-15, -ballSpeed.getY());
+            else if (ball.getCenterX() <= myPaddle.getXPos()+0.25*myPaddle.getPaddleNode().getWidth()){
+                ballSpeed=new Point2D(ballSpeed.getX()-EDGE_DEFLECT_ANGLE_INCREMENT, -ballSpeed.getY());
             }
             else {
                 ballSpeed=new Point2D( ballSpeed.getX(), -ballSpeed.getY());
@@ -60,11 +61,11 @@ public class Ball {
         }
     }
 
-    public void wallDeflectBall( ArrayList<Rectangle> myRects){
+    public void wallDeflectBall( ArrayList<Wall> myWalls){
 
-        for(Rectangle myRect : myRects){
+        for(Wall myWall : myWalls){
 
-            boolean intersectBool=checkBlockIntersectionAndDeflectBall(myRect, Main.WALL_WIDTH);
+            boolean intersectBool=checkBlockIntersectionAndDeflectBall(myWall.getWallNode(), myWall.getWidth());
         }
     }
 
@@ -84,20 +85,18 @@ public class Ball {
         return intersectionCheck;
     }
 
-    public boolean approximatelyEqual (double coord1, double coord2) {
-
-        return Math.abs(coord1-coord2)<=EPSILON;
-    }
 
     public void resetBall(KeyCode code){
         if (code==KeyCode.Q){
             ball.setCenterX(DEFAULT_X_POS);
             ball.setCenterY(DEFAULT_Y_POS);
-            ballSpeed=new Point2D(0,DEFAULT_BALL_SPEED_Y);
+            ballSpeed=new Point2D(DEFAULT_BALL_SPEED_X,DEFAULT_BALL_SPEED_Y);
         }
     }
 
-    protected void ballGetPowerUp() {
-        ballSpeed=new Point2D(1.05*ballSpeed.getX(),1.05*ballSpeed.getY());
+    public void ballGetPowerUp() {
+        ballSpeed=new Point2D(BALL_SPEED_POWER_UP_FACTOR*ballSpeed.getX(),BALL_SPEED_POWER_UP_FACTOR*ballSpeed.getY());
     }
+
+
 }

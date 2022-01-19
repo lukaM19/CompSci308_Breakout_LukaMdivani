@@ -24,7 +24,6 @@ public class PowerUp extends Ball {
     super(xPos, yPos, 5);
     Random ran = new Random();
     powerUpType=ran.nextInt(3);
-    System.out.println(powerUpType);
     setBallPropertiesAccordingToType(powerUpType);
   }
 
