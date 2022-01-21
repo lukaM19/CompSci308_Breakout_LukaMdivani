@@ -59,6 +59,8 @@ especially after the Tuesday class I realize that this was a mistake, and I shou
 to my original approach which would have made things easier and the code would have better quality.I did not
 get enough time to execute these changes.
 
+I also forgot to make a cheat key for powerup spwaning on request, but this should be an easy addition.
+
 ## How to Add New Levels
 
 Adding new levels is very easy if you use the 4 types of blocks implemented in the code.
